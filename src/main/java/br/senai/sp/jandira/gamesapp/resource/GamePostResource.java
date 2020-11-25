@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.senai.sp.jandira.gamesapp.model.GamePost;
 import br.senai.sp.jandira.gamesapp.repository.GameRepository;
 import br.senai.sp.jandira.gamesapp.resource.dto.GamePostDto;
+import br.senai.sp.jandira.gamesapp.utils.Date;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -54,11 +55,8 @@ public class GamePostResource {
 	@ResponseStatus(HttpStatus.CREATED)
 	public GamePost save(@Valid @RequestBody GamePost game) {
 		
-		// Determinando o horário de gravação do post
-		ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
-		LocalDateTime now = LocalDateTime.now(zoneId);
-		
-		game.setPostDate(now);
+		// Determinando o horário de gravação do post		
+		game.setPostDate(Date.getDateTime());
 		
 		System.out.println(game.getPostDate());
 		
