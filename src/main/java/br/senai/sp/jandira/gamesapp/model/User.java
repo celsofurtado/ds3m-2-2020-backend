@@ -94,14 +94,11 @@ public class User implements UserDetails {
 	}
 
 	
-	
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", localizacao=" + localizacao + ", password="
-				+ password + ", urlUserImage=" + urlUserImage + ", getId()=" + getId() + ", getName()=" + getName()
-				+ ", getEmail()=" + getEmail() + ", getPassword()=" + getPassword() + ", getUrlUserImage()="
-				+ getUrlUserImage() + ", getLocalizacao()=" + getLocalizacao() + ", hashCode()=" + hashCode()
-				+ ", getClass()=" + getClass() + ", toString()=" + super.toString() + "]";
+				+ password + ", perfis=" + perfis + ", urlUserImage=" + urlUserImage + "]";
 	}
 
 	@Override

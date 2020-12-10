@@ -28,8 +28,8 @@ public class Login {
 		return "Login [email=" + email + ", password=" + password + "]";
 	}
 
-	public UsernamePasswordAuthenticationToken convert() {
-		return new UsernamePasswordAuthenticationToken(this.email, this.password);
-	}
+//	public UsernamePasswordAuthenticationToken convertsss() {
+//		return new UsernamePasswordAuthenticationToken(this.email, this.password);
+//	}
 
 }

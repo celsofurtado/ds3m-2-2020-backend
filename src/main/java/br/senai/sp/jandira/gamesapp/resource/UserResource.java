@@ -48,7 +48,6 @@ public class UserResource {
 	@PostMapping
 	public ResponseEntity<User> save(@RequestBody User user) {
 		User userSalvo = userRepository.save(user);
-		
 		return ResponseEntity.ok(userSalvo);
 	}
 

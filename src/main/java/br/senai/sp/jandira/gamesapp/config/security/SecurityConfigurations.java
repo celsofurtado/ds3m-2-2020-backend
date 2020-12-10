@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import br.senai.sp.jandira.gamesapp.repository.UserRepository;
 
 @EnableWebSecurity
 @Configuration
@@ -19,6 +22,12 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private AuthenticationService authenticationService;
+	
+	@Autowired
+	private TokenService tokenService;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Override
 	@Bean
@@ -40,18 +49,19 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-//		http.authorizeRequests()
-//		.antMatchers(HttpMethod.POST, "/api/auth").permitAll()
-//		.antMatchers(HttpMethod.GET, "/api/consoles").permitAll()
-//		.antMatchers(HttpMethod.GET, "/api/consoles/*").permitAll()
-//		.antMatchers(HttpMethod.GET, "/api/posts").permitAll()
-//		.antMatchers(HttpMethod.GET, "/api/likes/*/totalcurtidas").permitAll()
-//		.antMatchers(HttpMethod.GET, "/api/comments/*/totalcomments").permitAll()
-//		.anyRequest().authenticated()
-//		.and().csrf().disable()
-//		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.authorizeRequests()
+		.antMatchers(HttpMethod.POST, "/api/auth").permitAll()
+		.antMatchers(HttpMethod.GET, "/api/consoles").permitAll()
+		.antMatchers(HttpMethod.GET, "/api/consoles/*").permitAll()
+		.antMatchers(HttpMethod.GET, "/api/posts").permitAll()
+		.antMatchers(HttpMethod.GET, "/api/likes/*/totalcurtidas").permitAll()
+		.antMatchers(HttpMethod.GET, "/api/comments/*/totalcomments").permitAll()
+		.anyRequest().authenticated()
+		.and().csrf().disable()
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and().addFilterBefore(new AuthenticationTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
 		
-		http.authorizeRequests().antMatchers("/api/*").permitAll();
+		//http.authorizeRequests().antMatchers("/api/*").permitAll();
 		
 	}
 	

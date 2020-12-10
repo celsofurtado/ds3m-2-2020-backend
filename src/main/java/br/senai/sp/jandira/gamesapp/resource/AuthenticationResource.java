@@ -1,5 +1,7 @@
 package br.senai.sp.jandira.gamesapp.resource;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,40 +17,44 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.senai.sp.jandira.gamesapp.config.security.TokenService;
 import br.senai.sp.jandira.gamesapp.model.Login;
+import br.senai.sp.jandira.gamesapp.model.User;
+import br.senai.sp.jandira.gamesapp.repository.UserRepository;
 import br.senai.sp.jandira.gamesapp.resource.dto.TokenDto;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationResource {
-	
+
 	@Autowired
 	private AuthenticationManager authManager;
-	
+
 	@Autowired
 	private TokenService tokenService;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@PostMapping
-	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid Login login) {
-		
-		System.out.println("1 - " + login.toString());
-		
-		UsernamePasswordAuthenticationToken loginData = 
-				new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword());
-		
-		try {
-			Authentication authentication = authManager.authenticate(loginData);
-			
-			String token = tokenService.gerarToken(authentication);
-			
-			System.out.println(token);
-			
-			return ResponseEntity.ok(new TokenDto(token, "Bearer"));
-			
-		} catch (AuthenticationException e) {
-			e.printStackTrace();
-			return ResponseEntity.badRequest().build();
-		}
-		
+	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid User user) {
+
+		Optional<User> loginUser = userRepository.findByEmail(user.getEmail());
+
+		user.setName(loginUser.get().getName());
+		user.setId(loginUser.get().getId());
+
+		UsernamePasswordAuthenticationToken loginData = new UsernamePasswordAuthenticationToken(user.getEmail(),
+				user.getPassword());
+
+		Authentication authentication = authManager.authenticate(loginData);
+
+		String token = tokenService.gerarToken(authentication);
+
+		return ResponseEntity.ok(new TokenDto(token, 
+				"Bearer", 
+				user.getName(), 
+				user.getEmail(),
+				user.getId()));
+
 	}
-	
+
 }
