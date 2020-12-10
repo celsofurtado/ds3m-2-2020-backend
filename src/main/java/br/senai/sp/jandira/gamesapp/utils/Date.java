@@ -14,9 +14,9 @@ public class Date {
 	}
 	
 	public static LocalDateTime getDateTime() {
-		//ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
-		//LocalDateTime now = LocalDateTime.now(zoneId);
-		LocalDateTime now = LocalDateTime.now();
+		ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
+		LocalDateTime now = LocalDateTime.now(zoneId);
+		//LocalDateTime now = LocalDateTime.now();
 		return now;
 	}
 	
